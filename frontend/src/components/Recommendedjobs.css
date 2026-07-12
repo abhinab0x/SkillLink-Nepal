@@ -1,0 +1,139 @@
+.recommended-jobs {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+.recommended-jobs h2 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.rec-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.rec-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.rec-card-header h3 {
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.match-badge {
+  text-align: center;
+  background: #eefbf1;
+  border: 1px solid #b7e6c2;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  min-width: 60px;
+}
+
+.match-percent {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2b7a4b;
+}
+
+.match-label {
+  display: block;
+  font-size: 0.65rem;
+  color: #2b7a4b;
+  text-transform: uppercase;
+}
+
+.score-bar-track {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf7d, #2b7a4b);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.skill-group {
+  margin-bottom: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.skill-group-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.skill-group-label.matched { color: #2b7a4b; }
+.skill-group-label.missing { color: #cc4b3b; }
+.skill-group-label.preferred { color: #3b4cca; }
+
+.skill-tag {
+  font-size: 0.78rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.skill-tag.matched {
+  background: #eefbf1;
+  color: #2b7a4b;
+}
+
+.skill-tag.missing {
+  background: #fff0ee;
+  color: #cc4b3b;
+}
+
+.skill-tag.preferred {
+  background: #eef2ff;
+  color: #3b4cca;
+}
+
+.location-bonus {
+  font-size: 0.85rem;
+  color: #a06b00;
+  margin-top: 0.4rem;
+}
+
+.rec-score-footer {
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #eee;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.status-message {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.status-message.error {
+  color: #cc4b3b;
+}
