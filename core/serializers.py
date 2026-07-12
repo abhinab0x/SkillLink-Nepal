@@ -73,7 +73,8 @@ class JobSerializer(serializers.ModelSerializer):
 
 class ApplicationSerializer(serializers.ModelSerializer):
     job_detail = JobSerializer(source='job', read_only=True)
+    candidate_detail = JobSeekerProfileSerializer(source='user', read_only=True)
 
     class Meta:
         model = Application
-        fields = ['application_id', 'user', 'job', 'job_detail', 'status', 'applied_at']
+        fields = ['application_id', 'user', 'job', 'job_detail', 'candidate_detail', 'status', 'applied_at']

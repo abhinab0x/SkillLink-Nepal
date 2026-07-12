@@ -55,8 +55,17 @@ class JobRequiredSkillViewSet(viewsets.ModelViewSet):
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
-    queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
+
+    def get_queryset(self):
+        queryset = Application.objects.all().order_by('-applied_at')
+        user_id = self.request.query_params.get('user')
+        job_id = self.request.query_params.get('job')
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+        if job_id:
+            queryset = queryset.filter(job_id=job_id)
+        return queryset
 
 
 @api_view(['GET'])

@@ -16,7 +16,7 @@ router.register(r'employer-profiles', EmployerProfileViewSet)
 router.register(r'candidate-skills', CandidateSkillViewSet)
 router.register(r'jobs', JobViewSet)
 router.register(r'job-required-skills', JobRequiredSkillViewSet)
-router.register(r'applications', ApplicationViewSet)
+router.register(r'applications', ApplicationViewSet, basename='application')
 
 urlpatterns = router.urls + [
     path('seeker-profiles/<int:user_id>/recommended-jobs/', recommended_jobs, name='recommended-jobs'),
