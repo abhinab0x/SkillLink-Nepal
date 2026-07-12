@@ -38,6 +38,27 @@
   border-bottom: 2px solid #3b4cca;
 }
 
+.nav-user {
+  color: #444;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.nav-logout {
+  background: none;
+  border: 1px solid #cc4b3b;
+  color: #cc4b3b;
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-logout:hover {
+  background: #fff0ee;
+}
+
 main {
   padding-bottom: 3rem;
 }

@@ -78,3 +78,35 @@
 .status-message.error {
   color: #cc4b3b;
 }
+
+.apply-message {
+  background: #eefbf1;
+  color: #2b7a4b;
+  border: 1px solid #b7e6c2;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.apply-button {
+  margin-top: 0.9rem;
+  background: #3b4cca;
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.3rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.apply-button:hover:not(:disabled) {
+  background: #2f3ba3;
+}
+
+.apply-button:disabled {
+  background: #b9c0e8;
+  cursor: default;
+}

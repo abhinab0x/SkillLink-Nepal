@@ -2,10 +2,16 @@ import { useState, useEffect } from 'react'
 import api from '../api/axios'
 import './JobList.css'
 
+// TEMPORARY: hardcoded as Ramesh (user_id=1) until login/auth is built.
+const CURRENT_SEEKER_ID = 1
+
 function JobList() {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  // Tracks which job_ids the user has just applied to, for instant UI feedback
+  const [appliedJobIds, setAppliedJobIds] = useState([])
+  const [applyMessage, setApplyMessage] = useState('')
 
   useEffect(() => {
     api.get('jobs/')
@@ -20,6 +26,25 @@ function JobList() {
       })
   }, [])
 
+  const handleApply = (jobId) => {
+    setApplyMessage('')
+    api.post('applications/', {
+      user: CURRENT_SEEKER_ID,
+      job: jobId,
+      status: 'applied',
+    })
+      .then(() => {
+        setAppliedJobIds((prev) => [...prev, jobId])
+        setApplyMessage('Application submitted successfully!')
+      })
+      .catch((err) => {
+        console.error('Error applying:', err)
+        const detail = err.response?.data?.non_field_errors?.[0]
+          || 'Could not submit application. You may have already applied.'
+        setApplyMessage(detail)
+      })
+  }
+
   if (loading) return <p className="status-message">Loading jobs...</p>
   if (error) return <p className="status-message error">{error}</p>
   if (jobs.length === 0) return <p className="status-message">No jobs posted yet.</p>
@@ -27,6 +52,7 @@ function JobList() {
   return (
     <div className="job-list">
       <h2>Available Jobs</h2>
+      {applyMessage && <p className="apply-message">{applyMessage}</p>}
       {jobs.map((job) => (
         <div className="job-card" key={job.job_id}>
           <div className="job-card-header">
@@ -51,6 +77,13 @@ function JobList() {
               </span>
             ))}
           </div>
+          <button
+            className="apply-button"
+            disabled={appliedJobIds.includes(job.job_id)}
+            onClick={() => handleApply(job.job_id)}
+          >
+            {appliedJobIds.includes(job.job_id) ? 'Applied ✓' : 'Apply Now'}
+          </button>
         </div>
       ))}
     </div>
