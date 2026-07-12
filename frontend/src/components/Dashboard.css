@@ -94,3 +94,31 @@
 .status-message.error {
   color: #cc4b3b;
 }
+
+.skill-add-form {
+  max-width: 500px;
+  margin-bottom: 1.5rem;
+}
+
+.my-skills-list {
+  max-width: 500px;
+}
+
+.skill-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+}
+
+.proficiency-tag {
+  margin-left: 0.6rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.proficiency-beginner { background: #fff8e1; color: #a06b00; }
+.proficiency-intermediate { background: #eef2ff; color: #3b4cca; }
+.proficiency-expert { background: #eefbf1; color: #2b7a4b; }

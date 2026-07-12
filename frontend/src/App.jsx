@@ -5,6 +5,7 @@ import JobList from './components/JobList'
 import RecommendedJobs from './components/RecommendedJobs'
 import RecommendedCandidates from './components/RecommendedCandidates'
 import MyApplications from './components/MyApplications'
+import MySkills from './components/MySkills'
 import JobApplicants from './components/JobApplicants'
 import PostJob from './components/PostJob'
 import Login from './components/Login'
@@ -26,6 +27,7 @@ function NavBar({ currentUser, onLogout }) {
         <>
           <Link to="/recommended">Recommended For You</Link>
           <Link to="/my-applications">My Applications</Link>
+          <Link to="/my-skills">My Skills</Link>
         </>
       )}
       {currentUser?.role === 'employer' && (
@@ -79,6 +81,7 @@ function App() {
 
             <Route path="/recommended" element={seekerOnly(<RecommendedJobs />)} />
             <Route path="/my-applications" element={seekerOnly(<MyApplications currentUser={currentUser} />)} />
+            <Route path="/my-skills" element={seekerOnly(<MySkills currentUser={currentUser} />)} />
 
             <Route path="/candidates" element={employerOnly(<RecommendedCandidates />)} />
             <Route path="/post-job" element={employerOnly(<PostJob currentUser={currentUser} />)} />
