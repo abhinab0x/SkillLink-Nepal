@@ -1,9 +1,4 @@
--- =========================================================
--- SkillLink Nepal - Database Schema
--- Normalized to 3NF
--- =========================================================
 
--- 1. LOCATION (lookup table, referenced by users and jobs)
 CREATE TABLE location (
     location_id SERIAL PRIMARY KEY,
     district    VARCHAR(100) NOT NULL,
@@ -84,9 +79,7 @@ CREATE TABLE application (
     UNIQUE (user_id, job_id)   -- a candidate can't apply to the same job twice
 );
 
--- =========================================================
--- INDEXES for performance on the matching queries (Step 3)
--- =========================================================
+
 CREATE INDEX idx_candidate_skill_skill_id ON candidate_skill(skill_id);
 CREATE INDEX idx_job_required_skill_skill_id ON job_required_skill(skill_id);
 CREATE INDEX idx_job_location ON job(location_id);
