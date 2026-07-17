@@ -54,10 +54,19 @@ function NavBar({ currentUser, onLogout }) {
 }
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState(() => {
+  const savedUser = localStorage.getItem('currentUser')
+  return savedUser ? JSON.parse(savedUser) : null
+})
 
-  const handleLogin = (user) => setCurrentUser(user)
-  const handleLogout = () => setCurrentUser(null)
+  const handleLogin = (user) => {
+  localStorage.setItem('currentUser', JSON.stringify(user))
+  setCurrentUser(user)
+}
+  const handleLogout = () => {
+  localStorage.removeItem('currentUser')
+  setCurrentUser(null)
+}
 
   const seekerOnly = (element) =>
     currentUser?.role === 'seeker' ? element : <Navigate to="/login" />
