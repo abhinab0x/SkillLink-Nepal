@@ -7,7 +7,7 @@ function PostJob({ currentUser }) {
   const [locations, setLocations] = useState([])
   const [skills, setSkills] = useState([])
   const [form, setForm] = useState({
-    title: '', description: '', location: '', salary_min: '', salary_max: '',
+    title: '', description: '', location: '', salary_min: '', salary_max: '',contact_email: '', contact_phone: ''
   })
   // skillRows: [{ skill_id, importance }]
   const [skillRows, setSkillRows] = useState([{ skill_id: '', importance: 'required' }])
@@ -41,6 +41,8 @@ function PostJob({ currentUser }) {
       description: form.description,
       salary_min: form.salary_min || null,
       salary_max: form.salary_max || null,
+      contact_email: form.contact_email,
+      contact_phone: form.contact_phone,
       is_active: true,
     })
       .then((res) => {
@@ -58,7 +60,7 @@ function PostJob({ currentUser }) {
       .then(() => {
         setMessageType('success')
         setMessage('Job posted successfully!')
-        setForm({ title: '', description: '', location: '', salary_min: '', salary_max: '' })
+        setForm({ title: '', description: '', location: '', salary_min: '', salary_max: '', contact_email: '', contact_phone: '' })
         setSkillRows([{ skill_id: '', importance: 'required' }])
       })
       .catch((err) => {
@@ -93,6 +95,24 @@ function PostJob({ currentUser }) {
           <input type="number" name="salary_min" placeholder="Min" value={form.salary_min} onChange={handleChange} />
           <input type="number" name="salary_max" placeholder="Max" value={form.salary_max} onChange={handleChange} />
         </div>
+
+        <label>Contact Email</label>
+        <input
+          type="email"
+          name="contact_email"
+          value={form.contact_email}
+          onChange={handleChange}
+          placeholder="example@gmail.com"
+        />
+
+        <label>Contact Phone</label>
+        <input
+          type="tel"
+          name="contact_phone"
+          value={form.contact_phone}
+          onChange={handleChange}
+          placeholder="98XXXXXXXX"
+        />
 
         <label>Required / Preferred Skills</label>
         {skillRows.map((row, index) => (

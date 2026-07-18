@@ -85,6 +85,11 @@ function RecommendedJobs() {
             )}
           </div>
 
+          <div className="contact-info">
+            <p><strong>Contact Email:</strong> {rec.contact_email}</p>
+            <p><strong>Contact Phone:</strong> {rec.contact_phone}</p>
+          </div>
+
           <div className="rec-score-footer">
             Raw match score: <strong>{rec.match_score}</strong> points
           </div>

@@ -69,6 +69,8 @@ def calculate_match(seeker_profile: JobSeekerProfile, job: Job) -> dict:
         'missing_required_skills': missing_required,
         'matched_preferred_skills': matched_preferred,
         'same_location': same_location,
+        'contact_email': job.contact_email,
+        'contact_phone': job.contact_phone,
     }
 
 

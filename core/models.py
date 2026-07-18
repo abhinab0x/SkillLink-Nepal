@@ -124,6 +124,8 @@ class Job(models.Model):
     description = models.TextField(blank=True, null=True)
     salary_min = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     salary_max = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     posted_at = models.DateTimeField(auto_now_add=True)
 
