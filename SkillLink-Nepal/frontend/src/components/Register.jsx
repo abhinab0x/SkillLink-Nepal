@@ -8,7 +8,9 @@ import nepalDataContainer from '@nepalutils/nepal-geodata/nepal_data/provinces_w
 // return it as a plain array of names.
 function toNameList(value) {
   if (Array.isArray(value)) return value
-  if (value && typeof value === 'object') return Object.keys(value)
+  if (value && typeof value === 'object') {
+    return Object.values(value).flat()
+  }
   return []
 }
 
