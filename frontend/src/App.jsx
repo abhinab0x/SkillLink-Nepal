@@ -75,7 +75,7 @@ function App() {
 
         <main>
           <Routes>
-            <Route path="/" element={<JobList />} />
+            <Route path="/" element={<JobList currentUser={currentUser} />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
 

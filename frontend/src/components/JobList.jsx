@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react'
 import api from '../api/axios'
 import './JobList.css'
 
-// TEMPORARY: hardcoded as Ramesh (user_id=1) until login/auth is built.
-const CURRENT_SEEKER_ID = 1
-
-function JobList() {
+function JobList({ currentUser }) {
   const [jobs, setJobs] = useState([])
   const [locations, setLocations] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [appliedJobIds, setAppliedJobIds] = useState([])
   const [applyMessage, setApplyMessage] = useState('')
+  const [applyMessageType, setApplyMessageType] = useState('success')
 
   const [searchText, setSearchText] = useState('')
   const [locationFilter, setLocationFilter] = useState('')
@@ -33,25 +31,56 @@ function JobList() {
 
   const handleApply = (jobId) => {
     setApplyMessage('')
+
+    if (!currentUser) {
+      setApplyMessageType('error')
+      setApplyMessage('Please log in as a job seeker to apply.')
+      return
+    }
+
+    if (currentUser.role !== 'seeker') {
+      setApplyMessageType('error')
+      setApplyMessage('Only job seekers can apply to jobs.')
+      return
+    }
+
     api.post('applications/', {
-      user: CURRENT_SEEKER_ID,
+      user: currentUser.user_id,
       job: jobId,
       status: 'applied',
     })
       .then(() => {
         setAppliedJobIds((prev) => [...prev, jobId])
+        setApplyMessageType('success')
         setApplyMessage('Application submitted successfully!')
       })
       .catch((err) => {
         console.error('Error applying:', err)
-        const detail = err.response?.data?.non_field_errors?.[0]
-          || 'Could not submit application. You may have already applied.'
-        setApplyMessage(detail)
+
+        // DRF sends a raw technical message when the UNIQUE(user, job)
+        // constraint blocks a duplicate application - translate it into
+        // something a real user should see instead of the DB-level wording.
+        const rawErrors = err.response?.data?.non_field_errors
+        const isDuplicate = rawErrors?.some((msg) =>
+          msg.toLowerCase().includes('unique')
+        )
+
+        setApplyMessageType('error')
+        setApplyMessage(
+          isDuplicate
+            ? "You've already applied to this job."
+            : 'Could not submit application. Please try again.'
+        )
+
+        // Still reflect it as applied in the UI, since a duplicate error
+        // means an application already exists for this job.
+        if (isDuplicate) {
+          setAppliedJobIds((prev) => [...prev, jobId])
+        }
       })
   }
 
   // Client-side filtering - fine for a mini-project's data volume.
-  // For a large-scale system this would move to backend query params instead.
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch = searchText.trim() === '' ||
       job.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -92,7 +121,11 @@ function JobList() {
         </select>
       </div>
 
-      {applyMessage && <p className="apply-message">{applyMessage}</p>}
+      {applyMessage && (
+        <p className={`apply-message ${applyMessageType === 'error' ? 'error' : ''}`}>
+          {applyMessage}
+        </p>
+      )}
 
       {filteredJobs.length === 0 ? (
         <p className="status-message">No jobs match your search.</p>
@@ -121,13 +154,15 @@ function JobList() {
                 </span>
               ))}
             </div>
-            <button
-              className="apply-button"
-              disabled={appliedJobIds.includes(job.job_id)}
-              onClick={() => handleApply(job.job_id)}
-            >
-              {appliedJobIds.includes(job.job_id) ? 'Applied ✓' : 'Apply Now'}
-            </button>
+            {currentUser?.role !== 'employer' && (
+              <button
+                className="apply-button"
+                disabled={appliedJobIds.includes(job.job_id)}
+                onClick={() => handleApply(job.job_id)}
+              >
+                {appliedJobIds.includes(job.job_id) ? 'Applied ✓' : 'Apply Now'}
+              </button>
+            )}
           </div>
         ))
       )}
