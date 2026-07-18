@@ -1,0 +1,129 @@
+.post-job-wrapper {
+  max-width: 500px;
+}
+
+.post-job-wrapper textarea {
+  padding: 0.7rem 0.85rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.post-job-wrapper textarea:focus {
+  outline: none;
+  border-color: var(--color-indigo);
+  box-shadow: 0 0 0 3px rgba(33, 49, 92, 0.12);
+}
+
+/* ---------- Salary row ---------- */
+.salary-row {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.salary-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- Skill requirement rows ---------- */
+.skill-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  align-items: center;
+}
+
+.skill-row select {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-md);
+  font-size: 0.87rem;
+  font-family: var(--font-body);
+  background: var(--color-surface);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath fill='%236b6560' d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  padding-right: 2rem;
+  transition: border-color 0.15s ease;
+}
+
+.skill-row select:focus {
+  outline: none;
+  border-color: var(--color-indigo);
+}
+
+.remove-row-btn {
+  background: rgba(168, 50, 74, 0.08);
+  color: var(--color-crimson);
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s ease;
+}
+
+.remove-row-btn:hover {
+  background: rgba(168, 50, 74, 0.16);
+}
+
+.add-row-btn {
+  background: none;
+  border: 1.5px dashed var(--color-indigo);
+  color: var(--color-indigo);
+  border-radius: var(--radius-md);
+  padding: 0.55rem;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  margin-bottom: 0.6rem;
+  width: 100%;
+  transition: background 0.15s ease;
+}
+
+.add-row-btn:hover {
+  background: rgba(33, 49, 92, 0.06);
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE OVERRIDES
+   ========================================================= */
+@media (max-width: 640px) {
+  .post-job-wrapper {
+    max-width: 100%;
+  }
+
+  .post-job-wrapper textarea {
+    font-size: 1rem; /* prevents iOS Safari auto-zoom on focus */
+  }
+
+  .salary-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skill-row {
+    flex-wrap: wrap;
+  }
+
+  .skill-row select {
+    flex: 1 1 100%;
+    font-size: 1rem;
+  }
+
+  .remove-row-btn {
+    margin-left: auto;
+  }
+}
