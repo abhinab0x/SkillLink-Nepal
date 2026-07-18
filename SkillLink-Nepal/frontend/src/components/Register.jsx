@@ -12,8 +12,19 @@ function Register() {
     location: '',
     contact: '', // ✅ Changed 'Contact' to 'contact' here
   })
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('') // 'success' | 'error'
+
+  const [selectedProvince, setSelectedProvince] = useState('')
+  const [selectedDistrict, setSelectedDistrict] = useState('')
+
+  const uniqueProvinces = [...new Set(locations.map(loc => loc.province))]
+  const uniqueDistricts = [...new Set(locations
+    .filter(loc => loc.province === selectedProvince)
+    .map(loc => loc.district))]
+  const filteredLocalLevels = locations.filter(
+    loc => loc.province === selectedProvince && loc.district === selectedDistrict
+  )
 
   useEffect(() => {
     api.get('locations/').then((res) => setLocations(res.data))
