@@ -1,19 +1,19 @@
-
+-- 1. LOCATION
 CREATE TABLE location (
-  location_id SERIAL PRIMARY KEY,
-    province VARCHAR(100) NOT NULL,
-    district VARCHAR(100) NOT NULL,
-    local_level VARCHAR(100) NOT NULL
+    location_id SERIAL PRIMARY KEY,
+    district    VARCHAR(100) NOT NULL,
+    province    VARCHAR(100) NOT NULL,
+    UNIQUE (district, province)
 );
 
 -- 2. USER (base identity table, extended by Django's auth system later)
 CREATE TABLE app_user (
     user_id      SERIAL PRIMARY KEY,
-    contact VARCHAR(20),
     username     VARCHAR(50) UNIQUE NOT NULL,
     email        VARCHAR(255) UNIQUE NOT NULL,
     password     VARCHAR(255) NOT NULL,          -- stored as a hash, never plain text
     role         VARCHAR(10) NOT NULL CHECK (role IN ('seeker', 'employer')),
+    contact      VARCHAR(20),
     location_id  INTEGER REFERENCES location(location_id) ON DELETE SET NULL,
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -49,17 +49,17 @@ CREATE TABLE candidate_skill (
 
 -- 7. JOB (posted by an employer)
 CREATE TABLE job (
-    job_id       SERIAL PRIMARY KEY,
-    employer_id  INTEGER NOT NULL REFERENCES employer_profile(user_id) ON DELETE CASCADE,
-    location_id  INTEGER REFERENCES location(location_id) ON DELETE SET NULL,
-    title        VARCHAR(150) NOT NULL,
-    description  TEXT,
+    job_id        SERIAL PRIMARY KEY,
+    employer_id   INTEGER NOT NULL REFERENCES employer_profile(user_id) ON DELETE CASCADE,
+    location_id   INTEGER REFERENCES location(location_id) ON DELETE SET NULL,
+    title         VARCHAR(150) NOT NULL,
+    description   TEXT,
+    salary_min    NUMERIC(10, 2),
+    salary_max    NUMERIC(10, 2),
     contact_email VARCHAR(254),
-    salary_min   NUMERIC(10, 2),
     contact_phone VARCHAR(20),
-    salary_max   NUMERIC(10, 2),
-    is_active    BOOLEAN DEFAULT TRUE,
-    posted_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    is_active     BOOLEAN DEFAULT TRUE,
+    posted_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 8. JOB REQUIRED SKILL (junction: Job <-> Skill, many-to-many)
