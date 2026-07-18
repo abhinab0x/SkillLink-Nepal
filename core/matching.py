@@ -93,11 +93,14 @@ def recommend_candidates_for_job(job: Job, min_score=1):
     """
     all_seekers = JobSeekerProfile.objects.all()
     results = []
+
     for seeker in all_seekers:
         match = calculate_match(seeker, job)
         match['user_id'] = seeker.user_id
         match['candidate_username'] = seeker.user.username
+        match['contact'] = seeker.user.contact   # <-- Add this line
         results.append(match)
+
     results = [r for r in results if r['match_score'] >= min_score]
     results.sort(key=lambda r: r['match_score'], reverse=True)
     return results

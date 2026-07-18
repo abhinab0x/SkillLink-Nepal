@@ -10,6 +10,7 @@ function Register() {
     password: '',
     role: 'seeker',
     location: '',
+    Contact: '',
   })
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('') // 'success' | 'error'
@@ -32,6 +33,7 @@ function Register() {
       password: form.password,
       role: form.role,
       location: form.location || null,
+      contact: form.contact,
     })
       .then((res) => {
         const newUser = res.data
@@ -44,7 +46,7 @@ function Register() {
       })
       .then(() => {
         setMessageType('success')
-        setMessage(`Account created! Your user ID is shown above — use it to log in.`)
+        setMessage(`Account created! Your User ID is ${newUser.user_id}. Use it to log in.`)
       })
       .catch((err) => {
         console.error(err)
@@ -81,6 +83,15 @@ function Register() {
             </option>
           ))}
         </select>
+
+         <label>Contact</label>
+          <input
+            type="text"
+            name="contact"
+            value={form.contact}
+            onChange={handleChange}
+            required
+          />
 
         <button type="submit">Register</button>
       </form>

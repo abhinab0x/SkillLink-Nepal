@@ -40,6 +40,7 @@ function RecommendedCandidates() {
         <div className="rec-card" key={cand.user_id}>
           <div className="rec-card-header">
             <h3>{cand.candidate_username}</h3>
+            <p><strong>Contact:</strong> {cand.contact}</p>
             <div className="match-badge">
               <span className="match-percent">{cand.match_percentage}%</span>
               <span className="match-label">match</span>
