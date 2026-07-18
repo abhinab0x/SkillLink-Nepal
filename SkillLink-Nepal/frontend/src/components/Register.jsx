@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../api/axios'
+import nepalGeoData from '@nepalutils/nepal-geodata' // Professional npm package mapping out all of Nepal
 import './AuthForms.css'
 
 function Register() {
@@ -10,25 +11,37 @@ function Register() {
     password: '',
     role: 'seeker',
     location: '',
-    contact: '', // ✅ Changed 'Contact' to 'contact' here
+    contact: '', 
   })
-  const [message, setMessage] = useState('')
-  const [messageType, setMessageType] = useState('') // 'success' | 'error'
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('')
 
+  // --- FULL DYNAMIC CASCADING SELECTION ENGINE ---
+  const [nepalData, setNepalData] = useState([])
   const [selectedProvince, setSelectedProvince] = useState('')
   const [selectedDistrict, setSelectedDistrict] = useState('')
 
-  const uniqueProvinces = [...new Set(locations.map(loc => loc.province))]
-  const uniqueDistricts = [...new Set(locations
-    .filter(loc => loc.province === selectedProvince)
-    .map(loc => loc.district))]
-  const filteredLocalLevels = locations.filter(
-    loc => loc.province === selectedProvince && loc.district === selectedDistrict
-  )
-
   useEffect(() => {
-    api.get('locations/').then((res) => setLocations(res.data))
+    // Keep your original backend metadata calls operational
+    api.get('locations/').then((res) => setLocations(res.data)).catch(err => console.error(err))
+
+    // Pull the absolute layout containing 100% of Nepal's cities and villages out of the npm utility package
+    try {
+      const fullDataset = nepalGeoData('english') // Reads out the total structural data list in English
+      setNepalData(fullDataset)
+    } catch (error) {
+      console.error("Failed to parse package geometry:", error)
+    }
   }, [])
+
+  // Dynamic grouping logic pulling straight from the full NPM dataset
+  const uniqueProvinces = nepalData.map((p) => p.province)
+  
+  const currentProvinceObj = nepalData.find((p) => p.province === selectedProvince)
+  const uniqueDistricts = currentProvinceObj ? currentProvinceObj.districts.map((d) => d.district) : []
+  
+  const currentDistrictObj = currentProvinceObj ? currentProvinceObj.districts.find((d) => d.district === selectedDistrict) : null
+  const filteredLocalLevels = currentDistrictObj ? currentDistrictObj.municipalities : []
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -38,24 +51,28 @@ function Register() {
     e.preventDefault()
     setMessage(null)
 
+    // Build the string: "Biratnagar Metropolitan City, Morang, Koshi Province"
+    const fullLocationString = form.location 
+      ? `${form.location}, ${selectedDistrict}, ${selectedProvince}` 
+      : null
+
     api.post('users/', {
       username: form.username,
       email: form.email,
       password: form.password,
       role: form.role,
-      location: form.location || null,
+      location: fullLocationString, // Saves the structured text to your DB column
       contact: form.contact,
     })
       .then((res) => {
         const newUser = res.data
-        // Create the matching profile depending on role
         const profileCall = form.role === 'seeker'
           ? api.post('seeker-profiles/', { user: newUser.user_id, bio: '', years_experience: 0 })
           : api.post('employer-profiles/', { user: newUser.user_id, company_name: form.username, company_description: '' })
 
-        return profileCall.then(() => newUser) // ✅ Returns newUser so the next line can read it
+        return profileCall.then(() => newUser) 
       })
-      .then((newUser) => { // ✅ Added 'newUser' inside the parentheses here
+      .then((newUser) => {
         setMessageType('success')
         setMessage(`Account created! Your User ID is ${newUser.user_id}. Use it to log in.`)
       })
@@ -85,24 +102,62 @@ function Register() {
           <option value="employer">Employer</option>
         </select>
 
-        <label>Location</label>
-        <select name="location" value={form.location} onChange={handleChange}>
-          <option value="">Select a district</option>
-          {locations.map((loc) => (
-            <option key={loc.location_id} value={loc.location_id}>
-              {loc.district}, {loc.province}
-            </option>
+        {/* --- COMPLETELY DYNAMIC ALL-NEPAL DROPDOWNS --- */}
+        <label>Province</label>
+        <select 
+          value={selectedProvince} 
+          onChange={(e) => { 
+            setSelectedProvince(e.target.value); 
+            setSelectedDistrict(''); 
+            setForm(prev => ({ ...prev, location: '' })); 
+          }}
+          required
+        >
+          <option value="">Select Province</option>
+          {uniqueProvinces.map((prov) => (
+            <option key={prov} value={prov}>{prov}</option>
           ))}
         </select>
 
-         <label>Contact</label>
-          <input
-            type="text"
-            name="contact"
-            value={form.contact}
-            onChange={handleChange}
-            required
-          />
+        <label>District</label>
+        <select 
+          value={selectedDistrict} 
+          onChange={(e) => { 
+            setSelectedDistrict(e.target.value); 
+            setForm(prev => ({ ...prev, location: '' })); 
+          }} 
+          disabled={!selectedProvince}
+          required
+        >
+          <option value="">Select District</option>
+          {uniqueDistricts.map((dist) => (
+            <option key={dist} value={dist}>{dist}</option>
+          ))}
+        </select>
+
+        <label>Local Level / Municipality</label>
+        <select 
+          name="location" 
+          value={form.location} 
+          onChange={handleChange} 
+          disabled={!selectedDistrict}
+          required
+        >
+          <option value="">Select Local Level</option>
+          {filteredLocalLevels.map((mun) => (
+            <option key={mun} value={mun}>{mun}</option>
+          ))}
+        </select>
+        {/* ----------------------------------------------- */}
+
+        <label>Contact</label>
+        <input
+          type="text"
+          name="contact"
+          value={form.contact}
+          onChange={handleChange}
+          required
+        />
 
         <button type="submit">Register</button>
       </form>

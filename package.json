@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@nepalutils/nepal-geodata": "^1.0.3"
+  }
+}
